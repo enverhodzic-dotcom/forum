@@ -23,8 +23,8 @@ if (isset($_POST['delete_id'])) {
 
 // 4. RÉCUPÉRATION DES DONNÉES
 $count = $pdo->query("SELECT COUNT(*) FROM participants")->fetchColumn();
-// On récupère tout le monde pour pouvoir choisir qui supprimer
-$liste = $pdo->query("SELECT id, email, nom, prenom FROM participants ORDER BY id DESC")->fetchAll();
+// Ajout de 'classe' et 'tel' dans la requête
+$liste = $pdo->query("SELECT id, email, nom, prenom, classe, tel FROM participants ORDER BY id DESC")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -33,7 +33,7 @@ $liste = $pdo->query("SELECT id, email, nom, prenom FROM participants ORDER BY i
     <title>Gestion des participants</title>
     <style>
         body { font-family: sans-serif; background: #0d1117; color: white; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: #161b22; padding: 20px; border-radius: 10px; border: 1px solid #30363d; }
+        .container { max-width: 900px; margin: auto; background: #161b22; padding: 20px; border-radius: 10px; border: 1px solid #30363d; }
         h1 { color: #58a6ff; text-align: center; }
         .stats { font-size: 1.5rem; text-align: center; margin-bottom: 30px; color: #ff7b72; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -54,6 +54,8 @@ $liste = $pdo->query("SELECT id, email, nom, prenom FROM participants ORDER BY i
                 <tr>
                     <th>Email</th>
                     <th>Nom / Prénom</th>
+                    <th>Classe</th>
+                    <th>Téléphone</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -62,6 +64,8 @@ $liste = $pdo->query("SELECT id, email, nom, prenom FROM participants ORDER BY i
                 <tr>
                     <td><?php echo htmlspecialchars($p['email']); ?></td>
                     <td><?php echo htmlspecialchars($p['nom'] . ' ' . $p['prenom']); ?></td>
+                    <td><?php echo htmlspecialchars($p['classe']); ?></td>
+                    <td><?php echo htmlspecialchars($p['tel']); ?></td>
                     <td>
                         <form method="POST" onsubmit="return confirm('Supprimer cet élève ?');" style="display:inline;">
                             <input type="hidden" name="delete_id" value="<?php echo $p['id']; ?>">
@@ -70,7 +74,7 @@ $liste = $pdo->query("SELECT id, email, nom, prenom FROM participants ORDER BY i
                     </td>
                 </tr>
                 <?php endforeach; ?>
-                <?php if($count == 0) echo "<tr><td colspan='3' style='text-align:center;'>Aucune victime pour le moment.</td></tr>"; ?>
+                <?php if($count == 0) echo "<tr><td colspan='5' style='text-align:center;'>Aucune victime pour le moment.</td></tr>"; ?>
             </tbody>
         </table>
     </div>
